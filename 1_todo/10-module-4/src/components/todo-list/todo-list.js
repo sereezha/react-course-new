@@ -4,7 +4,7 @@ import TodoListItem from 'components/todo-list-item';
 
 import './todo-list.scss';
 
-const TodoList = ({ todos, onDeleted }) => {
+const TodoList = ({ todos, onDeleted, onToggleDone, onToggleImportant }) => {
 	const elements = todos.map((item) => {
 		const { id, ...itemProps } = item;
 
@@ -15,6 +15,8 @@ const TodoList = ({ todos, onDeleted }) => {
 					onDeleted={() => {
 						onDeleted(id);
 					}}
+					onToggleDone={() => onToggleDone(id)}
+					onToggleImportant={() => onToggleImportant(id)}
 				/>
 			</li>
 		);
