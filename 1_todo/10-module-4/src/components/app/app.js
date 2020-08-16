@@ -73,7 +73,7 @@ export default class App extends Component {
 		});
 	};
 
-	filterTodoByStatus = (todos, status) => {
+	filterTodosByStatus = (todos, status) => {
 		switch (status) {
 			case 'all':
 				return todos;
@@ -100,7 +100,7 @@ export default class App extends Component {
 	render() {
 		const { todoData, query, status } = this.state;
 		const visibleTodos = this.filterTodosByQuery(todoData, query);
-		const filteredTodos = this.filterTodoByStatus(visibleTodos, status);
+		const filteredTodos = this.filterTodosByStatus(visibleTodos, status);
 		const doneCount = todoData.filter((el) => el.done).length;
 		const todoCount = todoData.length - doneCount;
 		return (
