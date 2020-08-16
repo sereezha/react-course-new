@@ -13,7 +13,12 @@ export default class ItemAddForm extends Component {
 
 	onSubmit = (e) => {
 		e.preventDefault();
-		this.props.onItemAdded(this.state.label);
+		const { label } = this.state;
+		if (label.length === 0) {
+			alert('Todo cannot be empty :)');
+			return;
+		}
+		this.props.onItemAdded(label);
 		this.setState({ label: '' });
 	};
 
