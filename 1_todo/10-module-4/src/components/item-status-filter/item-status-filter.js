@@ -1,4 +1,5 @@
 import React from 'react';
+import { TODOS_FILTER_STATUSES } from 'helpers/consts';
 
 import './item-status-filter.scss';
 
@@ -7,17 +8,17 @@ const ItemStatusFilter = (props) => {
 	const buttons = [
 		{
 			type: 'button',
-			value: 'all',
+			value: TODOS_FILTER_STATUSES.all,
 			label: 'All',
 		},
 		{
 			type: 'button',
-			value: 'active',
+			value: TODOS_FILTER_STATUSES.active,
 			label: 'Active',
 		},
 		{
 			type: 'button',
-			value: 'done',
+			value: TODOS_FILTER_STATUSES.done,
 			label: 'Done',
 		},
 	];

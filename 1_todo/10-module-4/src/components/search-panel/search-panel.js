@@ -4,7 +4,7 @@ import './search-panel.scss';
 
 const SearchPanel = (props) => {
 	const [value, setValue] = useState('');
-	const { onSearch } = props;
+  const { onSearch } = props;
 
 	const onChangeHandler = (e) => {
 		const { value } = e.target;

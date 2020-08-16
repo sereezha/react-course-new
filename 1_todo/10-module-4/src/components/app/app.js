@@ -5,6 +5,7 @@ import SearchPanel from 'components/search-panel';
 import TodoList from 'components/todo-list';
 import ItemStatusFilter from 'components/item-status-filter';
 import ItemAddForm from 'components/item-add-form';
+import { TODOS_FILTER_STATUSES } from 'helpers/consts';
 
 import './app.scss';
 
@@ -18,7 +19,7 @@ export default class App extends Component {
 			this.createTodoItem('Have a lunch'),
 		],
 		query: '',
-		status: 'all',
+		status: TODOS_FILTER_STATUSES.all,
 	};
 
 	createTodoItem(label) {
@@ -39,7 +40,7 @@ export default class App extends Component {
 			const newArr = [...todoData, newItem];
 			return {
 				todoData: newArr,
-				status: 'all',
+				status: TODOS_FILTER_STATUSES.all,
 			};
 		});
 	};
@@ -75,13 +76,13 @@ export default class App extends Component {
 
 	filterTodosByStatus = (todos, status) => {
 		switch (status) {
-			case 'all':
+			case TODOS_FILTER_STATUSES.all:
 				return todos;
 
-			case 'active':
+			case TODOS_FILTER_STATUSES.active:
 				return todos.filter(({ done }) => !done);
 
-			case 'done':
+			case TODOS_FILTER_STATUSES.done:
 				return todos.filter(({ done }) => done);
 
 			default:
