@@ -1,4 +1,6 @@
 import React from 'react';
+import classNames from 'classnames';
+
 import { TODOS_FILTER_STATUSES } from 'helpers/consts';
 
 import './item-status-filter.scss';
@@ -26,10 +28,10 @@ const ItemStatusFilter = (props) => {
 		<div className="btn-group">
 			{buttons.map(({ type, value, label }) => {
 				const isActive = status === value;
-				const btnAdditionalClass = isActive
-					? 'btn-info'
-					: 'btn-outline-secondary';
-				const btnClasses = `btn ${btnAdditionalClass}`;
+				const btnClasses = classNames('btn', {
+					'btn-info': isActive,
+					'btn-outline-secondary': !isActive,
+				});
 				return (
 					<button
 						key={value}

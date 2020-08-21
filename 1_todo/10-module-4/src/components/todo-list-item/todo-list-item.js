@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import './todo-list-item.scss';
 
@@ -12,18 +13,13 @@ const TodoListItem = (props) => {
 		onToggleImportant,
 	} = props;
 
-	let classNames = 'todo-list-item';
-
-	if (done) {
-		classNames += ' done';
-	}
-
-	if (important) {
-		classNames += ' important';
-	}
+	const listItemClasses = classNames('todo-list-item', {
+		done: done,
+		important: important,
+	});
 
 	return (
-		<span className={classNames}>
+		<span className={listItemClasses}>
 			<span className="todo-list-item-label" onClick={onToggleDone}>
 				{label}
 			</span>

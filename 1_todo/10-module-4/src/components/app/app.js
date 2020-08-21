@@ -109,8 +109,7 @@ const App = () => {
 		setStatus(status);
 	};
 
-	const todoDataLength = !!todoData.length;
-	const isTodoDataExist = !!todoData && !!todoDataLength;
+	const isTodoDataExist = !!todoData.length;
 	const visibleTodos = isTodoDataExist && filterTodosByQuery(todoData, query);
 	const filteredTodos =
 		isTodoDataExist && filterTodosByStatus(visibleTodos, status);
