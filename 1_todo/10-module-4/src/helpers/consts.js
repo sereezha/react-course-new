@@ -3,3 +3,7 @@ export const TODOS_FILTER_STATUSES = {
   active: 'active',
   done: 'done'
 }
+
+export const LOCAL_STORAGE_ITEMS = {
+  todoData: 'todoData'
+}

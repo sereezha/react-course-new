@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import AppHeader from 'components/app-header';
 import SearchPanel from 'components/search-panel';
 import TodoList from 'components/todo-list';
 import ItemStatusFilter from 'components/item-status-filter';
 import ItemAddForm from 'components/item-add-form';
-import { TODOS_FILTER_STATUSES } from 'helpers/consts';
+import { TODOS_FILTER_STATUSES, LOCAL_STORAGE_ITEMS } from 'helpers/consts';
 
 import './app.scss';
+
 let maxId = 100;
 
 const App = () => {
@@ -20,11 +21,11 @@ const App = () => {
 		setTodoData(todoData);
 	};
 
+	useEffect(getItemsFromLocalStorage, []);
+
 	const setItemsInLocalStorage = (item, value) => {
 		localStorage.setItem(item, JSON.stringify(value));
 	};
-
-	useEffect(getItemsFromLocalStorage, []);
 
 	const createTodoItem = (label) => {
 		return { label, important: false, done: false, id: maxId++ };
@@ -37,20 +38,20 @@ const App = () => {
 				...todoData.slice(0, idx),
 				...todoData.slice(idx + 1),
 			];
-			setItemsInLocalStorage('todoData', newTodoData);
+			setItemsInLocalStorage(LOCAL_STORAGE_ITEMS.todoData, newTodoData);
 			return newTodoData;
 		});
 	};
 
-	const addItem = (text) => {
+	const addItem = useCallback((text) => {
 		const newItem = createTodoItem(text);
 		setTodoData((todoData) => {
 			const newTodoData = [...todoData, newItem];
-			setItemsInLocalStorage('todoData', newTodoData);
+			setItemsInLocalStorage(LOCAL_STORAGE_ITEMS.todoData, newTodoData);
 			return newTodoData;
 		});
 		setStatus(TODOS_FILTER_STATUSES.all);
-	};
+	}, [setTodoData]);
 
 	const toggleProperty = (arr, id, propName) => {
 		const idx = arr.findIndex((el) => el.id === id);
@@ -63,7 +64,7 @@ const App = () => {
 	const onToggleImportant = (id) => {
 		setTodoData((todoData) => {
 			const newTodoData = toggleProperty(todoData, id, 'important');
-			setItemsInLocalStorage('todoData', newTodoData);
+			setItemsInLocalStorage(LOCAL_STORAGE_ITEMS.todoData, newTodoData);
 			return toggleProperty(todoData, id, 'important');
 		});
 	};
@@ -71,7 +72,7 @@ const App = () => {
 	const onToggleDone = (id) => {
 		setTodoData((todoData) => {
 			const newTodoData = toggleProperty(todoData, id, 'done');
-			setItemsInLocalStorage('todoData', newTodoData);
+			setItemsInLocalStorage(LOCAL_STORAGE_ITEMS.todoData, newTodoData);
 			return newTodoData;
 		});
 	};
@@ -101,13 +102,16 @@ const App = () => {
 		}
 	};
 
-	const onQueryChange = (query) => {
+	const onQueryChange = useCallback((query) => {
 		setQuery(query);
-	};
+	}, [setQuery]);
 
-	const onFilterChange = (status) => {
-		setStatus(status);
-	};
+	const onFilterChange = useCallback(
+		(status) => {
+			setStatus(status);
+		},
+		[setStatus]
+	);
 
 	const isTodoDataExist = !!todoData.length;
 	const visibleTodos = isTodoDataExist && filterTodosByQuery(todoData, query);

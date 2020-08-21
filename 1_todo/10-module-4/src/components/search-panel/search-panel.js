@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 
 import './search-panel.scss';
 
-const SearchPanel = (props) => {
+const SearchPanel = memo((props) => {
 	const [value, setValue] = useState('');
   const { onSearch } = props;
 
@@ -21,6 +21,6 @@ const SearchPanel = (props) => {
 			onChange={onChangeHandler}
 		/>
 	);
-};
+});
 
 export default SearchPanel;

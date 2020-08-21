@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {memo} from 'react';
 import classNames from 'classnames';
 
 import { TODOS_FILTER_STATUSES } from 'helpers/consts';
 
 import './item-status-filter.scss';
 
-const ItemStatusFilter = (props) => {
-	const { onFilterChange, status } = props;
+const ItemStatusFilter = memo((props) => {
+  const { onFilterChange, status } = props;
+
 	const buttons = [
 		{
 			type: 'button',
@@ -45,6 +46,6 @@ const ItemStatusFilter = (props) => {
 			})}
 		</div>
 	);
-};
+});
 
 export default ItemStatusFilter;
