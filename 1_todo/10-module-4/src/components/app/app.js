@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import AppHeader from 'components/app-header';
 import SearchPanel from 'components/search-panel';
@@ -8,44 +8,51 @@ import ItemAddForm from 'components/item-add-form';
 import { TODOS_FILTER_STATUSES } from 'helpers/consts';
 
 import './app.scss';
+let maxId = 100;
 
-export default class App extends Component {
-	maxId = 100;
+const App = () => {
+	const [todoData, setTodoData] = useState([]);
+	const [query, setQuery] = useState('');
+	const [status, setStatus] = useState(TODOS_FILTER_STATUSES.all);
 
-	state = {
-		todoData: [
-			this.createTodoItem('Drink Coffee'),
-			this.createTodoItem('Make Awesome App'),
-			this.createTodoItem('Have a lunch'),
-		],
-		query: '',
-		status: TODOS_FILTER_STATUSES.all,
+	const getItemsFromLocalStorage = () => {
+		const todoData = JSON.parse(localStorage.getItem('todoData')) || [];
+		setTodoData(todoData);
 	};
 
-	createTodoItem(label) {
-		return { label, important: false, done: false, id: this.maxId++ };
-	}
+	const setItemsInLocalStorage = (item, value) => {
+		localStorage.setItem(item, JSON.stringify(value));
+	};
 
-	deleteItem = (id) => {
-		this.setState(({ todoData }) => {
+	useEffect(getItemsFromLocalStorage, []);
+
+	const createTodoItem = (label) => {
+		return { label, important: false, done: false, id: maxId++ };
+	};
+
+	const deleteItem = (id) => {
+		setTodoData((todoData) => {
 			const idx = todoData.findIndex((el) => el.id === id);
-			const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
-			return { todoData: newArray };
+			const newTodoData = [
+				...todoData.slice(0, idx),
+				...todoData.slice(idx + 1),
+			];
+			setItemsInLocalStorage('todoData', newTodoData);
+			return newTodoData;
 		});
 	};
 
-	addItem = (text) => {
-		const newItem = this.createTodoItem(text);
-		this.setState(({ todoData }) => {
-			const newArr = [...todoData, newItem];
-			return {
-				todoData: newArr,
-				status: TODOS_FILTER_STATUSES.all,
-			};
+	const addItem = (text) => {
+		const newItem = createTodoItem(text);
+		setTodoData((todoData) => {
+			const newTodoData = [...todoData, newItem];
+			setItemsInLocalStorage('todoData', newTodoData);
+			return newTodoData;
 		});
+		setStatus(TODOS_FILTER_STATUSES.all);
 	};
 
-	toggleProperty = (arr, id, propName) => {
+	const toggleProperty = (arr, id, propName) => {
 		const idx = arr.findIndex((el) => el.id === id);
 		const oldItem = arr[idx];
 		const newItem = { ...oldItem, [propName]: !oldItem[propName] };
@@ -53,19 +60,23 @@ export default class App extends Component {
 		return newArray;
 	};
 
-	onToggleImportant = (id) => {
-		this.setState(({ todoData }) => {
-			return { todoData: this.toggleProperty(todoData, id, 'important') };
+	const onToggleImportant = (id) => {
+		setTodoData((todoData) => {
+			const newTodoData = toggleProperty(todoData, id, 'important');
+			setItemsInLocalStorage('todoData', newTodoData);
+			return toggleProperty(todoData, id, 'important');
 		});
 	};
 
-	onToggleDone = (id) => {
-		this.setState(({ todoData }) => {
-			return { todoData: this.toggleProperty(todoData, id, 'done') };
+	const onToggleDone = (id) => {
+		setTodoData((todoData) => {
+			const newTodoData = toggleProperty(todoData, id, 'done');
+			setItemsInLocalStorage('todoData', newTodoData);
+			return newTodoData;
 		});
 	};
 
-	filterTodosByQuery = (todos, query) => {
+	const filterTodosByQuery = (todos, query) => {
 		if (todos.length === 0) return todos;
 		return todos.filter(({ label }) => {
 			const queryLowerCase = query.toLowerCase();
@@ -74,7 +85,7 @@ export default class App extends Component {
 		});
 	};
 
-	filterTodosByStatus = (todos, status) => {
+	const filterTodosByStatus = (todos, status) => {
 		switch (status) {
 			case TODOS_FILTER_STATUSES.all:
 				return todos;
@@ -90,40 +101,42 @@ export default class App extends Component {
 		}
 	};
 
-	onQueryChange = (query) => {
-		this.setState({ query });
+	const onQueryChange = (query) => {
+		setQuery(query);
 	};
 
-	onFilterChange = (status) => {
-		this.setState({ status });
+	const onFilterChange = (status) => {
+		setStatus(status);
 	};
 
-	render() {
-		const { todoData, query, status } = this.state;
-		const visibleTodos = this.filterTodosByQuery(todoData, query);
-		const filteredTodos = this.filterTodosByStatus(visibleTodos, status);
-		const doneCount = todoData.filter((el) => el.done).length;
-		const todoCount = todoData.length - doneCount;
-		return (
-			<div className="todo-app">
-				<AppHeader toDo={todoCount} done={doneCount} />
-				<div className="top-panel d-flex">
-					<SearchPanel onSearch={this.onQueryChange} />
-					<ItemStatusFilter
-						onFilterChange={this.onFilterChange}
-						status={status}
-					/>
-				</div>
+	const todoDataLength = !!todoData.length;
+	const isTodoDataExist = !!todoData && !!todoDataLength;
+	const visibleTodos = isTodoDataExist && filterTodosByQuery(todoData, query);
+	const filteredTodos =
+		isTodoDataExist && filterTodosByStatus(visibleTodos, status);
+	const doneCount = isTodoDataExist && todoData.filter((el) => el.done).length;
+	const todoCount = isTodoDataExist && todoData.length - doneCount;
+
+	return (
+		<div className="todo-app">
+			<AppHeader toDo={todoCount} done={doneCount} />
+			<div className="top-panel d-flex">
+				<SearchPanel onSearch={onQueryChange} />
+				<ItemStatusFilter onFilterChange={onFilterChange} status={status} />
+			</div>
+			{!!isTodoDataExist && (
 				<TodoList
 					todos={filteredTodos}
 					onDeleted={(id) => {
-						this.deleteItem(id);
+						deleteItem(id);
 					}}
-					onToggleImportant={(id) => this.onToggleImportant(id)}
-					onToggleDone={(id) => this.onToggleDone(id)}
+					onToggleImportant={(id) => onToggleImportant(id)}
+					onToggleDone={(id) => onToggleDone(id)}
 				/>
-				<ItemAddForm onItemAdded={this.addItem} />
-			</div>
-		);
-	}
-}
+			)}
+			<ItemAddForm onItemAdded={addItem} />
+		</div>
+	);
+};
+
+export default App;
