@@ -18,8 +18,12 @@ const PeoplePage = () => {
 		<div className="row mb2">
 			<div className="col-md-6">
 				<ItemList
-          onItemSelected={onPersonSelected}
-          getData={swapiService.getAllPeople}
+					onItemSelected={onPersonSelected}
+					getData={swapiService.getAllPeople}
+					renderItem={(item) => {
+						const { name, gender, birthYear } = item;
+						return `${name} (${gender}, ${birthYear})`;
+					}}
 				/>
 			</div>
 			<div className="col-md-6">

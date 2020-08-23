@@ -5,7 +5,7 @@ import Spinner from '../spinner';
 import './item-list.css';
 
 const ItemList = (props) => {
-	const { onItemSelected, getData } = props;
+	const { onItemSelected, getData, renderItem } = props;
 	const [itemsList, setItemsList] = useState(null);
 
 	useEffect(() => {
@@ -21,24 +21,29 @@ const ItemList = (props) => {
 
 	return (
 		<ul className="item-list list-group">
-			<Items itemsList={itemsList} onItemSelected={onItemSelected} />
+			<Items
+				itemsList={itemsList}
+				onItemSelected={onItemSelected}
+				renderItem={renderItem}
+			/>
 		</ul>
 	);
 };
 
 const Items = (props) => {
-	const { itemsList, onItemSelected } = props;
+	const { itemsList, onItemSelected, renderItem } = props;
 	return (
 		<>
 			{itemsList.map((item) => {
-				const { id, name } = item;
+				const { id } = item;
+				const value = renderItem(item);
 				return (
 					<li
 						key={id}
 						className="list-group-item"
 						onClick={() => onItemSelected(id)}
 					>
-						{name}
+						{value}
 					</li>
 				);
 			})}
