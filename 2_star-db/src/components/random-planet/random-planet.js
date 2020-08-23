@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
+import Spinner from '../spinner';
 import SwapiService from '../../services/swapi-service';
 
 import './random-planet.css';
 
 const RandomPlanet = () => {
 	const [planet, setPlanet] = useState({});
+	const [loading, setLoading] = useState(false);
 
 	const swapiService = new SwapiService();
 
@@ -22,32 +25,40 @@ const RandomPlanet = () => {
 	}, []);
 
 	const { id, name, population, rotationPeriod, diameter } = planet;
+
 	return (
 		<div className="random-planet jumbotron rounded">
-			{!!id && (
-				<img
-					className="planet-image"
-					src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
-					alt=""
-				/>
+			{loading ? (
+				<Spinner />
+			) : (
+				<>
+					{!!id && (
+						<img
+							className="planet-image"
+							src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
+							alt=""
+						/>
+					)}
+
+					<div>
+						<h4>{name}</h4>
+						<ul className="list-group list-group-flush">
+							<li className="list-group-item">
+								<span className="term">Population</span>
+								<span>{population}</span>
+							</li>
+							<li className="list-group-item">
+								<span className="term">Rotation Period</span>
+								<span>{rotationPeriod}</span>
+							</li>
+							<li className="list-group-item">
+								<span className="term">Diameter</span>
+								<span>{diameter}</span>
+							</li>
+						</ul>
+					</div>
+				</>
 			)}
-			<div>
-				<h4>{name}</h4>
-				<ul className="list-group list-group-flush">
-					<li className="list-group-item">
-						<span className="term">Population</span>
-						<span>{population}</span>
-					</li>
-					<li className="list-group-item">
-						<span className="term">Rotation Period</span>
-						<span>{rotationPeriod}</span>
-					</li>
-					<li className="list-group-item">
-						<span className="term">Diameter</span>
-						<span>{diameter}</span>
-					</li>
-				</ul>
-			</div>
 		</div>
 	);
 };
