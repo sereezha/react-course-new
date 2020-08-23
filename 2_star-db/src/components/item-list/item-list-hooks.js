@@ -1,43 +1,41 @@
 import React, { useState, useEffect } from 'react';
 
 import Spinner from '../spinner';
-import SwapiService from '../../services/swapi-service';
 
 import './item-list.css';
 
 const ItemList = (props) => {
-	const [peopleList, setPeopleList] = useState(null);
-	const swapiService = new SwapiService();
+	const [itemsList, setItemsList] = useState(null);
 
 	useEffect(() => {
-		swapiService.getAllPeople().then((peopleList) => {
-			setPeopleList(peopleList);
+		props.getData.then((itemsList) => {
+			setItemsList(itemsList);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	if (!peopleList) {
+	if (!itemsList) {
 		return <Spinner />;
 	}
 
 	return (
 		<ul className="item-list list-group">
-			<Items peopleList={peopleList} onItemSelected={props.onItemSelected} />
+			<Items itemsList={itemsList} onItemSelected={props.onItemSelected} />
 		</ul>
 	);
 };
 
 const Items = (props) => {
-	const { peopleList } = props;
+  const { itemsList, onItemSelected } = props;
 	return (
 		<>
-			{peopleList.map((person) => {
-				const { id, name } = person;
+			{itemsList.map((item) => {
+				const { id, name } = item;
 				return (
 					<li
 						key={id}
 						className="list-group-item"
-						onClick={() => props.onItemSelected(id)}
+						onClick={() => onItemSelected(id)}
 					>
 						{name}
 					</li>
