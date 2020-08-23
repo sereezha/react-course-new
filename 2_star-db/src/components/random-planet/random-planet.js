@@ -4,27 +4,16 @@ import SwapiService from '../../services/swapi-service';
 import './random-planet.css';
 
 const RandomPlanet = () => {
-	const [planet, setPlanet] = useState({
-		id: null,
-		name: null,
-		population: null,
-		rotationPeriod: null,
-		diameter: null,
-	});
+	const [planet, setPlanet] = useState({});
 
 	const swapiService = new SwapiService();
 
+	const onPlanetLoaded = (planet) => {
+		setPlanet(planet);
+	};
+
 	const updatePlanet = () => {
-		const someID = Math.floor(Math.random() * 25) + 2;
-		swapiService.getPlanet(7).then((planet) => {
-			setPlanet({
-				id: someID,
-				name: planet.name,
-				population: planet.population,
-				rotationPeriod: planet.rotation_period,
-				diameter: planet.diameter,
-			});
-		});
+		swapiService.getPlanet(7).then(onPlanetLoaded);
 	};
 
 	useEffect(() => {
