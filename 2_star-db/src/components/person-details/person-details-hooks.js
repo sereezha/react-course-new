@@ -1,48 +1,40 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Spinner from '../spinner';
 import SwapiService from '../../services/swapi-service';
 
 import './person-details.css';
 
-export default class PersonDetails extends Component {
-	swapiService = new SwapiService();
+const PersonDetails = (props) => {
+	const [person, setPerson] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const { personId } = props;
+	const swapiService = new SwapiService();
 
-	state = {
-		person: null,
-		loading: false,
+	const updatePerson = () => {
+		setLoading(true);
+		if (!personId) return;
+		swapiService.getPerson(personId).then((person) => {
+			setPerson(person);
+			setLoading(false);
+		});
 	};
 
-	componentDidMount() {
-		this.updatePerson();
+	useEffect(() => {
+		updatePerson();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [personId]);
+
+	if (!person) {
+		return <span>Select a person from a list</span>;
 	}
 
-	componentDidUpdate(prevProps) {
-		if (prevProps.personId === this.props.personId) return;
-		this.updatePerson();
-	}
-
-	updatePerson() {
-		this.setState({ loading: true });
-		const { personId } = this.props;
-		if (!personId) return;
-		this.swapiService.getPerson(personId).then((person) => {
-			this.setState({ person, loading: false });
-		});
-	}
-
-	render() {
-		const { person, loading } = this.state;
-		if (!person) {
-			return <span>Select a person from a list</span>;
-		}
-		return (
-			<div className="person-details card">
-				{loading ? <Spinner /> : <PersonView person={person} />}
-			</div>
-		);
-	}
-}
+	return (
+		<div className="person-details card">
+			{loading ? <Spinner /> : <PersonView person={person} />}
+		</div>
+	);
+};
 
 const PersonView = (props) => {
 	const { person } = props;
@@ -74,3 +66,5 @@ const PersonView = (props) => {
 		</>
 	);
 };
+
+export default PersonDetails;
