@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator';
 import SwapiService from '../../services/swapi-service';
 
 import './random-planet.css';
@@ -8,6 +9,7 @@ import './random-planet.css';
 const RandomPlanet = () => {
 	const [planet, setPlanet] = useState({});
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
 
 	const swapiService = new SwapiService();
 
@@ -16,8 +18,13 @@ const RandomPlanet = () => {
 		setLoading(false);
 	};
 
+	const onError = (err) => {
+		setError(true);
+		setLoading(false);
+	};
+
 	const updatePlanet = () => {
-		swapiService.getPlanet(7).then(onPlanetLoaded);
+		swapiService.getPlanet(9).then(onPlanetLoaded).catch(onError);
 	};
 
 	useEffect(() => {
@@ -25,9 +32,17 @@ const RandomPlanet = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+  const hasData = !(loading || error);
+  
+	const errorMessage = error && <ErrorIndicator /> ;
+	const spinner = loading && <Spinner /> ;
+	const content = hasData && <PlanetView planet={planet} /> ;
+
 	return (
 		<div className="random-planet jumbotron rounded">
-			{loading ? <Spinner /> : <PlanetView planet={planet} />}
+      {errorMessage}
+      {spinner}
+      {content}
 		</div>
 	);
 };
