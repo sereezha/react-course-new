@@ -5,10 +5,11 @@ import Spinner from '../spinner';
 import './item-list.css';
 
 const ItemList = (props) => {
+	const { onItemSelected, getData } = props;
 	const [itemsList, setItemsList] = useState(null);
 
 	useEffect(() => {
-		props.getData.then((itemsList) => {
+		getData().then((itemsList) => {
 			setItemsList(itemsList);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,13 +21,13 @@ const ItemList = (props) => {
 
 	return (
 		<ul className="item-list list-group">
-			<Items itemsList={itemsList} onItemSelected={props.onItemSelected} />
+			<Items itemsList={itemsList} onItemSelected={onItemSelected} />
 		</ul>
 	);
 };
 
 const Items = (props) => {
-  const { itemsList, onItemSelected } = props;
+	const { itemsList, onItemSelected } = props;
 	return (
 		<>
 			{itemsList.map((item) => {
