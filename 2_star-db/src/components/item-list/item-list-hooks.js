@@ -5,7 +5,7 @@ import SwapiService from '../../services/swapi-service';
 
 import './item-list.css';
 
-const ItemList = () => {
+const ItemList = (props) => {
 	const [peopleList, setPeopleList] = useState(null);
 	const swapiService = new SwapiService();
 
@@ -22,7 +22,7 @@ const ItemList = () => {
 
 	return (
 		<ul className="item-list list-group">
-			<Items peopleList={peopleList} />
+			<Items peopleList={peopleList} onItemSelected={props.onItemSelected} />
 		</ul>
 	);
 };
