@@ -10,7 +10,6 @@ const RandomPlanet = () => {
 	const [planet, setPlanet] = useState({});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
-
 	const swapiService = new SwapiService();
 
 	const onPlanetLoaded = (planet) => {
@@ -24,25 +23,28 @@ const RandomPlanet = () => {
 	};
 
 	const updatePlanet = () => {
-		swapiService.getPlanet(9).then(onPlanetLoaded).catch(onError);
+		const id = Math.floor(Math.random() * 17) + 2;
+		swapiService.getPlanet(id).then(onPlanetLoaded).catch(onError);
 	};
 
 	useEffect(() => {
 		updatePlanet();
+		const interval = setInterval(updatePlanet, 10000);
+		return () => clearInterval(interval);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-  const hasData = !(loading || error);
-  
-	const errorMessage = error && <ErrorIndicator /> ;
-	const spinner = loading && <Spinner /> ;
-	const content = hasData && <PlanetView planet={planet} /> ;
+	const hasData = !(loading || error);
+
+	const errorMessage = error && <ErrorIndicator />;
+	const spinner = loading && <Spinner />;
+	const content = hasData && <PlanetView planet={planet} />;
 
 	return (
 		<div className="random-planet jumbotron rounded">
-      {errorMessage}
-      {spinner}
-      {content}
+			{errorMessage}
+			{spinner}
+			{content}
 		</div>
 	);
 };
