@@ -9,14 +9,14 @@ export default class SwapiService {
 	}
 
 	async getAllPeople() {
-		const res = await this.getResource('/people/');
+    const res = await this.getResource('/people/');
 		return res.results.map(this._transformPerson);
 	}
 
 	async getPerson(id) {
 		const person = await this.getResource(`/people/${id}`);
 		return this._transformPerson(person);
-  }
+	}
 
 	async getAllPlanets() {
 		const res = await this.getResource('/planets/');
@@ -39,41 +39,41 @@ export default class SwapiService {
 	}
 
 	_extractId(item) {
-		const idRegExp = /\/([0-9]*)\/$/;
+    const idRegExp = /\/([0-9]*)\/$/;
 		return item.url.match(idRegExp)[1];
 	}
 
-	_transformPerson(person) {
+	_transformPerson = (person) => {
 		return {
-      id: this._extractId(person),
-      name: person.name,
-      gender: person.gender,
-      birthYear: person.birthYear,
-      eyeColor: person.eyeColor
+			id: this._extractId(person),
+			name: person.name,
+			gender: person.gender,
+			birthYear: person.birthYear,
+			eyeColor: person.eyeColor,
 		};
 	}
 
-	_transformPlanet(planet) {
+	_transformPlanet = (planet) => {
 		return {
-      id: this._extractId(planet),
-      name: planet.name,
-      population: planet.population,
-      rotationPeriod: planet.rotation_period,
-      diameter: planet.diameter
+			id: this._extractId(planet),
+			name: planet.name,
+			population: planet.population,
+			rotationPeriod: planet.rotation_period,
+			diameter: planet.diameter,
 		};
 	}
 
-	_transformStarship(starship) {
+	_transformStarship = (starship) => {
 		return {
-      id: this._extractId(starship),
-      name: starship.name,
-      model: starship.model,
-      manufacturer: starship.manufacturer,
-      costInCredits: starship.costInCredits,
-      length: starship.length,
-      crew: starship.crew,
-      passengers: starship.passengers,
-      cargoCapacity: starship.cargoCapacity
+			id: this._extractId(starship),
+			name: starship.name,
+			model: starship.model,
+			manufacturer: starship.manufacturer,
+			costInCredits: starship.costInCredits,
+			length: starship.length,
+			crew: starship.crew,
+			passengers: starship.passengers,
+			cargoCapacity: starship.cargoCapacity,
 		};
 	}
 }
