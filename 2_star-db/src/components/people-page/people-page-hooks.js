@@ -8,6 +8,7 @@ import './people-page.css';
 
 const PeoplePage = () => {
 	const [selectedPerson, setSelectedPerson] = useState(null);
+	const swapiService = new SwapiService();
 
 	const onPersonSelected = (id) => {
 		setSelectedPerson(id);
@@ -17,7 +18,8 @@ const PeoplePage = () => {
 		<div className="row mb2">
 			<div className="col-md-6">
 				<ItemList
-					onItemSelected={onPersonSelected}
+          onItemSelected={onPersonSelected}
+          getData={swapiService.getAllPeople}
 				/>
 			</div>
 			<div className="col-md-6">
