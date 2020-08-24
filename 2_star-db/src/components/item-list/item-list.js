@@ -17,10 +17,10 @@ export default class ItemList extends Component {
 	}
 
 	renderItems(itemsList) {
-		const { onItemSelected, renderItem } = this.props;
+		const { onItemSelected, children } = this.props;
 		return itemsList.map((item) => {
 			const { id } = item;
-			const value = renderItem(item);
+			const value = children(item);
 			return (
 				<li
 					key={id}

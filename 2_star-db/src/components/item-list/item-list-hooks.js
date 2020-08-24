@@ -5,7 +5,7 @@ import Spinner from '../spinner';
 import './item-list.css';
 
 const ItemList = (props) => {
-	const { onItemSelected, getData, renderItem } = props;
+	const { onItemSelected, getData, children } = props;
 	const [itemsList, setItemsList] = useState(null);
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ const ItemList = (props) => {
 			<Items
 				itemsList={itemsList}
 				onItemSelected={onItemSelected}
-				renderItem={renderItem}
+				renderItem={children}
 			/>
 		</ul>
 	);
