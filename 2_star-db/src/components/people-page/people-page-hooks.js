@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import SwapiService from '../../services/swapi-service';
 import ItemList from '../item-list';
-import PersonDetails from '../person-details';
+import ItemDetails from '../item-details';
 import Row from '../row';
 
 import './people-page.css';
@@ -24,7 +24,7 @@ const PeoplePage = () => {
 		</ItemList>
 	);
 
-	const personDetails = <PersonDetails personId={selectedPerson} />;
+	const personDetails = <ItemDetails itemId={selectedPerson} />;
 
 	return <Row eft={itemList} right={personDetails} />;
 };
