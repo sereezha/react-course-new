@@ -19,11 +19,9 @@ const PeoplePage = () => {
 		<ItemList
 			onItemSelected={onPersonSelected}
 			getData={swapiService.getAllPeople}
-			renderItem={(item) => {
-				const { name, gender, birthYear } = item;
-				return `${name} (${gender}, ${birthYear})`;
-			}}
-		/>
+		>
+			{(i) => `${i.name} (${i.birthYear})`}
+		</ItemList>
 	);
 
 	const personDetails = <PersonDetails personId={selectedPerson} />;
