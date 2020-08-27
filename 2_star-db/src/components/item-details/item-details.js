@@ -67,13 +67,3 @@ const ItemView = (props) => {
 		</>
 	);
 };
-
-export const Record = (props) => {
-  const { item, field, label } = props;
-	return (
-		<li className="list-group-item">
-			<span className="term">{label}</span>
-			<span>{item[field]}</span>
-		</li>
-	);
-};
