@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 
 import Header from '../header';
 import RandomPlanet from '../random-planet';
-import PeoplePage from '../people-page';
-import Row from '../row';
-import ItemDetails, { Record } from '../item-details/item-details';
+import ErrorBoundary from '../error-boundary';
+
+import ItemDetails from '../item-details';
+import Record from '../item-details/record';
 import SwapiService from '../../services/swapi-service';
-import ItemList from '../item-list';
+
+import {
+	PersonDetails,
+	PlanetDetails,
+	StarshipDetails,
+	PersonList,
+	PlanetList,
+	StarshipList,
+} from '../sw-components';
 
 import './app.css';
 
@@ -57,28 +66,23 @@ export default class App extends Component {
 		);
 
 		return (
-			<div>
-				<Header />
-				{/* {planet} */}
+			<ErrorBoundary>
+				<div className="stardb-app">
+					<Header />
 
-				{/* <div className="row mb2 button-row">
-					<button
-						className="toggle-planet btn btn-warning btn-lg"
-						onClick={this.toggleRandomPlanet}
-					>
-						Toggle Random Planet
-					</button>
-				</div> */}
-				{/* <PeoplePage /> */}
-				{/* <Row left={personDetails} right={starshipDetails} /> */}
-				<ItemList getData={getAllPeople} onItemSelected={() => {}}>
-					{({ name }) => <span>{name}</span>}
-				</ItemList>
+					<PersonDetails itemId={11} />
 
-				<ItemList getData={getAllPlanets} onItemSelected={() => {}}>
-					{({ name }) => <span>{name}</span>}
-				</ItemList>
-			</div>
+					<PlanetDetails itemId={5} />
+
+					<StarshipDetails itemId={9} />
+
+					<PersonList />
+
+					<StarshipList />
+
+					<PlanetList />
+				</div>
+			</ErrorBoundary>
 		);
 	}
 }
