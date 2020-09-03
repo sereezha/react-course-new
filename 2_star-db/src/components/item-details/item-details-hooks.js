@@ -23,7 +23,7 @@ const ItemDetails = (props) => {
 	useEffect(() => {
 		updateItem();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [itemId]);
+	}, [itemId, getData, getImageUrl]);
 
 	if (!item) {
 		return <span>Select a item from a list</span>;
