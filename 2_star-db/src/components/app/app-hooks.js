@@ -12,7 +12,16 @@ import './app.css';
 
 const App = () => {
 	const [showRandomPlanet, setShowRandomPlanet] = useState(true);
-	const swapiService = new DummySwapiService();
+	const [swapiService, setSwapiService] = useState(new DummySwapiService());
+
+	const onServiceChange = () => {
+		setSwapiService((prevState) => {
+			const Service =
+				prevState instanceof SwapiService ? DummySwapiService : SwapiService;
+
+			return new Service();
+		});
+	};
 
 	const toggleRandomPlanet = () => {
 		setShowRandomPlanet((prevState) => !prevState);
@@ -23,7 +32,7 @@ const App = () => {
 	return (
 		<div>
 			<SwapiServiceProvider value={swapiService}>
-				<Header />
+				<Header onServiceChange={onServiceChange} />
 				{planet}
 
 				<button
