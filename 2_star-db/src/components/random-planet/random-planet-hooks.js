@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import SwapiService from '../../services/swapi-service';
+import PropTypes from 'prop-types';
 
 import './random-planet.css';
 
-const RandomPlanet = () => {
+const RandomPlanet = ({ updateInterval }) => {
 	const [planet, setPlanet] = useState({});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
@@ -17,7 +18,7 @@ const RandomPlanet = () => {
 		setLoading(false);
 	};
 
-	const onError = (err) => {
+	const onError = () => {
 		setError(true);
 		setLoading(false);
 	};
@@ -29,7 +30,7 @@ const RandomPlanet = () => {
 
 	useEffect(() => {
 		updatePlanet();
-		const interval = setInterval(updatePlanet, 10000);
+		const interval = setInterval(updatePlanet, updateInterval);
 		return () => clearInterval(interval);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -82,5 +83,14 @@ const PlanetView = (props) => {
 		</>
 	);
 };
+
+RandomPlanet.defaultProps = {
+	updateInterval: 10000,
+};
+
+RandomPlanet.propTypes = {
+	updateInterval: PropTypes.number,
+};
+
 
 export default RandomPlanet;
