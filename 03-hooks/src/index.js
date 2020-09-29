@@ -1,18 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-const MyContext = React.createContext();
 
-const App = () => {
+const HookSwitcher = () => {
+	const [value, setValue] = useState(1);
+	const [visible, setVisible] = useState(true);
+
+	if (visible) {
+		return (
+			<div>
+				<button onClick={() => setValue((v) => v + 1)}>+</button>
+				<button onClick={() => setVisible(false)}>hide</button>
+				<PlanetInfo id={value} />
+			</div>
+		);
+	} else {
+		return <button onClick={() => setVisible(true)}>show</button>;
+	}
+};
+
+const PlanetInfo = (props) => {
+	const [planetName, setPlanetName] = useState(null);
+	useEffect(() => {
+		let cancelled = false;
+		fetch(`https://swapi.dev/api/planets/${props.id}`)
+			.then((res) => res.json())
+			.then((data) => !cancelled && setPlanetName(data.name));
+		return () => (cancelled = true);
+	}, [props.id]);
+
 	return (
-		<MyContext.Provider value="Hello World 123">
-			<Child />
-		</MyContext.Provider>
+		<div>
+			{props.id} - {planetName}
+		</div>
 	);
 };
 
-const Child = () => {
-	const value = useContext(MyContext);
-	return <p>{value}</p>;
-};
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+	<React.StrictMode>
+		<HookSwitcher />
+	</React.StrictMode>,
+	document.getElementById('root')
+);
