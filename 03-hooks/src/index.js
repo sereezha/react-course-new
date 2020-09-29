@@ -18,15 +18,20 @@ const HookSwitcher = () => {
 	}
 };
 
-const PlanetInfo = (props) => {
+const usePlanetInfo = (id) => {
 	const [planetName, setPlanetName] = useState(null);
 	useEffect(() => {
 		let cancelled = false;
-		fetch(`https://swapi.dev/api/planets/${props.id}`)
+		fetch(`https://swapi.dev/api/planets/${id}`)
 			.then((res) => res.json())
 			.then((data) => !cancelled && setPlanetName(data.name));
 		return () => (cancelled = true);
-	}, [props.id]);
+	}, [id]);
+	return [planetName];
+};
+
+const PlanetInfo = (props) => {
+	const [planetName] = usePlanetInfo(props.id);
 
 	return (
 		<div>
